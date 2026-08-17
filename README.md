@@ -61,3 +61,8 @@ The PlatformIO config targets `esp32dev` with TFT_eSPI pins for the common ESP32
 ## Arduino compile troubleshooting
 
 If Arduino IDE reports `vector: No such file or directory`, select **ESP32 Dev Module** under **Tools > Board** and compile the sketch from `arduino/vortex_cyd/vortex_cyd.ino`. The Arduino sketch avoids the C++ `<vector>` header for better compatibility.
+
+
+## Arduino single-file sketch
+
+`arduino/vortex_cyd/vortex_cyd.ino` is self-contained for Arduino IDE. If you see `sd_manager.h: No such file or directory`, you are compiling an old copy of the sketch; reopen the current `vortex_cyd.ino` from this repo.

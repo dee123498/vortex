@@ -85,3 +85,8 @@ The sketch now has a serial-only fallback so it can compile without the TFT libr
 ## Fix: `vector: No such file or directory`
 
 Make sure **Tools > Board** is set to an ESP32 board such as **ESP32 Dev Module**. This sketch no longer depends on the C++ `<vector>` header, so if you still see this error you are probably compiling an old copy of the sketch or compiling for a non-ESP32 board.
+
+
+## Fix: `sd_manager.h: No such file or directory`
+
+The `vortex_cyd.ino` sketch is now self-contained and no longer needs `sd_manager.h`, `tiny_llm.h`, `wifi_manager.h`, or `vortex_config.h` to compile. If you still see this error, Arduino IDE is compiling an old copy. Close Arduino IDE, reopen `arduino/vortex_cyd/vortex_cyd.ino` from this repo, and verify that the first local include is no longer `#include "sd_manager.h"`.
