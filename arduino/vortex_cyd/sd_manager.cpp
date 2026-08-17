@@ -102,22 +102,23 @@ String SDCardManager::learnFromFiles(const String &directory, size_t maxBytesPer
   return knowledge;
 }
 
-std::vector<String> SDCardManager::listModelFiles(const String &directory) {
-  std::vector<String> models;
-  if (!initialized) return models;
+int SDCardManager::countModelFiles(const String &directory) {
+  int count = 0;
+  if (!initialized) return count;
   File dir = SD.open(directory);
-  if (!dir || !dir.isDirectory()) return models;
+  if (!dir || !dir.isDirectory()) return count;
   while (true) {
     File entry = dir.openNextFile();
     if (!entry) break;
     String name = entry.name();
     if (!entry.isDirectory() && (name.endsWith(".tflite") || name.endsWith(".bin") || name.endsWith(".onnx") || name.endsWith(".gguf"))) {
-      models.push_back(name);
+      count++;
+      Serial.println("[SD] Local model found: " + name);
     }
     entry.close();
   }
   dir.close();
-  return models;
+  return count;
 }
 
 void SDCardManager::listFiles(const String &dirname, uint8_t levels) {

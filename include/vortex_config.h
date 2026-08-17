@@ -1,13 +1,11 @@
 #pragma once
 
 #include <Arduino.h>
-#include <vector>
-
 struct VortexPolicy {
   String purpose;
   String maker;
-  std::vector<String> whitelist;
-  std::vector<String> blacklist;
+  String whitelist;
+  String blacklist;
 };
 
 class VortexConfig {

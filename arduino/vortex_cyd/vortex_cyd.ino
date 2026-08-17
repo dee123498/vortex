@@ -94,7 +94,7 @@ void setup() {
   String pass = readWifiValue(wifiText, "password", FALLBACK_WIFI_PASSWORD);
   wifi.connect(ssid, pass);
 
-  int modelCount = sdReady ? sd.listModelFiles(VortexConfig::modelsDir()).size() : 0;
+  int modelCount = sdReady ? sd.countModelFiles(VortexConfig::modelsDir()) : 0;
   drawUi(sdReady ? "SD learning ready" : "No SD card", wifi.getIP(), modelCount);
 
   String prompts[] = {"Hello, who are you?", "Who is your maker?", "How can you learn from files?", "Where do local models go?", "Explain artificial intelligence"};

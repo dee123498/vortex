@@ -2,7 +2,6 @@
 
 #include <Arduino.h>
 #include <SD.h>
-#include <vector>
 
 class SDCardManager {
 public:
@@ -16,7 +15,7 @@ public:
   bool ensureDir(const String &path);
   void ensureVortexLayout();
   String learnFromFiles(const String &directory = "/vortex/knowledge", size_t maxBytesPerFile = 1536, uint8_t maxFiles = 12);
-  std::vector<String> listModelFiles(const String &directory = "/vortex/models");
+  int countModelFiles(const String &directory = "/vortex/models");
   void listFiles(const String &dirname = "/", uint8_t levels = 2);
   uint64_t getStorageSpace();
   bool ready() const;

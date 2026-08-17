@@ -56,3 +56,8 @@ If PlatformIO gives you `idf_tools.py installation failed`, you can use the self
 ## Hardware Notes
 
 The PlatformIO config targets `esp32dev` with TFT_eSPI pins for the common ESP32-2432S028 CYD ILI9341 display. SD uses CS GPIO 5 by default in firmware.
+
+
+## Arduino compile troubleshooting
+
+If Arduino IDE reports `vector: No such file or directory`, select **ESP32 Dev Module** under **Tools > Board** and compile the sketch from `arduino/vortex_cyd/vortex_cyd.ino`. The Arduino sketch avoids the C++ `<vector>` header for better compatibility.

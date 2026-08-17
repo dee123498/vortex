@@ -80,3 +80,8 @@ Drop learning files into `/vortex/knowledge` and local model files into `/vortex
 That error means Arduino IDE cannot find the `TFT_eSPI` library. Open **Tools > Manage Libraries**, search for `TFT_eSPI`, install **TFT_eSPI by Bodmer**, then restart Arduino IDE and compile again.
 
 The sketch now has a serial-only fallback so it can compile without the TFT library, but the CYD screen UI requires `TFT_eSPI` to be installed and configured with `TFT_eSPI_User_Setup.h`.
+
+
+## Fix: `vector: No such file or directory`
+
+Make sure **Tools > Board** is set to an ESP32 board such as **ESP32 Dev Module**. This sketch no longer depends on the C++ `<vector>` header, so if you still see this error you are probably compiling an old copy of the sketch or compiling for a non-ESP32 board.
