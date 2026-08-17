@@ -1,5 +1,10 @@
-#include <Arduino.h>
-#include <TFT_eSPI.h>
+// Vortex CYD Arduino IDE sketch. Open this folder in Arduino IDE and upload to ESP32 Dev Module.
+#if __has_include(<TFT_eSPI.h>)
+  #include <TFT_eSPI.h>
+  #define VORTEX_HAS_TFT 1
+#else
+  #define VORTEX_HAS_TFT 0
+#endif
 #include "sd_manager.h"
 #include "tiny_llm.h"
 #include "vortex_config.h"
@@ -9,7 +14,9 @@ static const int SD_CS_PIN = 5;
 static const char *FALLBACK_WIFI_SSID = "YOUR_SSID";
 static const char *FALLBACK_WIFI_PASSWORD = "YOUR_PASSWORD";
 
+#if VORTEX_HAS_TFT
 TFT_eSPI tft;
+#endif
 TinyLLM llm;
 SDCardManager sd;
 WiFiManager wifi;
@@ -26,6 +33,7 @@ String readWifiValue(const String &wifiFile, const String &key, const String &fa
 }
 
 void drawUi(const String &status, const String &ip, int modelCount) {
+#if VORTEX_HAS_TFT
   tft.fillScreen(TFT_BLACK);
   tft.fillRoundRect(6, 6, 308, 48, 8, TFT_DARKCYAN);
   tft.setTextColor(TFT_WHITE, TFT_DARKCYAN);
@@ -53,13 +61,22 @@ void drawUi(const String &status, const String &ip, int modelCount) {
   tft.setTextColor(TFT_LIGHTGREY, TFT_BLACK);
   tft.drawString("Drop files into /vortex/knowledge", 18, 168, 2);
   tft.drawString("Edit policy at /vortex/vortex_policy.txt", 18, 192, 2);
+#else
+  Serial.println("[UI] TFT_eSPI is not installed, so the screen UI is disabled.");
+  Serial.println("[UI] Install TFT_eSPI in Arduino IDE Library Manager for the CYD display.");
+  Serial.println("[UI] Status: " + status + " | WiFi: " + ip + " | Models: " + String(modelCount));
+#endif
 }
 
 void setup() {
   Serial.begin(115200);
   delay(500);
+#if VORTEX_HAS_TFT
   tft.init();
   tft.setRotation(1);
+#else
+  Serial.println("[WARN] TFT_eSPI.h was not found at compile time. Install TFT_eSPI to enable the CYD screen.");
+#endif
   drawUi("Booting", "offline", 0);
 
   Serial.println("\n=== Vortex CYD AI ===");
