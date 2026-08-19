@@ -1,0 +1,3 @@
+Wireless web UI implementation is included in src/vortex_web.cpp and src/vortex_web.h.
+
+Connect to VORTEX-AI, password Vortex208682De, then browse to 192.168.4.1.
