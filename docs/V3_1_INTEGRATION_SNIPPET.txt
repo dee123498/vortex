@@ -1,0 +1,26 @@
+V3.1 INTEGRATION
+
+1. Add near the other includes:
+#include "src/VortexLearning.h"
+
+2. Add a global:
+VortexLearning learning;
+
+3. After SD.begin(SD_CS), initialize:
+learning.begin(sdOK);
+
+4. At the beginning of handle(String q), before normal model generation:
+q.trim();
+if (q.startsWith("/learn ")) { String x=q.substring(7); learning.learnText(x); ui("LEARNED", x); return; }
+if (q.startsWith("/remember ")) { String x=q.substring(10); learning.remember(x); ui("MEMORY", "Saved."); return; }
+if (q.startsWith("/forget ")) { String x=q.substring(8); ui("MEMORY", learning.forget(x)?"Removed.":"Not found."); return; }
+if (q.startsWith("/knowledge ")) { String x=q.substring(11); String r=learning.retrieve(x); ui("SD KNOWLEDGE", r.length()?r:"No matching file."); return; }
+if (q=="/reload") { learning.reload(); ui("LEARNING", "SD knowledge reloaded."); return; }
+if (q=="/memory") { ui("LEARNING", learning.status()); return; }
+
+5. Before calling the model for a normal question, retrieve context:
+String sdContext=learning.retrieve(q, 1200);
+
+6. Prepend sdContext to the model prompt. If the context is empty, use the normal prompt.
+
+The existing V3.1 library is intentionally separate from the model. This allows SD learning to be upgraded without changing the neural checkpoint.
