@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <math.h>
 
 /*
   VORTEX AI COPROCESSOR - Raspberry Pi Pico
@@ -80,10 +81,8 @@ String answerFor(const String &input) {
   low.toLowerCase();
 
   if (low.length() == 0) return "I'm listening.";
-
   if (hasAny(low, "who are you", "what are you", "your name"))
     return "I'm Vortex, your local AI coprocessor. I'm running on the Raspberry Pi Pico.";
-
   if (hasAny(low, "hello", "hi", "hey", "yo "))
     return "Hello, " + activeName() + ". I'm ready.";
 
@@ -97,10 +96,8 @@ String answerFor(const String &input) {
 
   if (hasAny(low, "what can you do", "help", "capabilities"))
     return "I can chat offline, keep short-term memory per user, answer common questions, do simple arithmetic, and control the CYD through commands.";
-
   if (hasAny(low, "how are you", "are you okay"))
     return "I'm running normally. Pico AI core is online.";
-
   if (hasAny(low, "ai", "artificial intelligence", "neural", "model"))
     return "I am the AI coprocessor. The CYD provides my screen, touch controls, SD storage, and Wi-Fi services.";
 
@@ -116,16 +113,12 @@ String answerFor(const String &input) {
 
   if (hasAny(low, "joke", "funny", "laugh"))
     return "Why did the microcontroller get promoted? It finally had enough processing power to handle the responsibility.";
-
   if (hasAny(low, "weather", "temperature"))
     return "The CYD can check weather over Wi-Fi. Ask the CYD for the current weather.";
-
   if (hasAny(low, "physics", "gravity", "force", "motion"))
     return "Physics describes matter, motion, energy, and the forces that connect them.";
-
   if (hasAny(low, "math", "calculate", "equation"))
     return "I can handle simple arithmetic. Send an expression such as 12+7, 8*9, or 100/4.";
-
   if (hasAny(low, "goodbye", "bye"))
     return "Goodbye, " + activeName() + ". I'll be here when you return.";
 
@@ -134,14 +127,11 @@ String answerFor(const String &input) {
   char oper = 0;
   for (int i = 1; i < (int)low.length() - 1; ++i) {
     if (low[i] == '+' || low[i] == '-' || low[i] == '*' || low[i] == '/') {
-      op = i;
-      oper = low[i];
-      break;
+      op = i; oper = low[i]; break;
     }
   }
   if (op > 0) {
-    String a = low.substring(0, op);
-    String b = low.substring(op + 1);
+    String a = low.substring(0, op), b = low.substring(op + 1);
     a.trim(); b.trim();
     bool okA = a.length() && (a.toFloat() != 0.0f || a == "0");
     bool okB = b.length() && (b.toFloat() != 0.0f || b == "0");
@@ -173,19 +163,13 @@ void sendFrame(const String &text) {
 void handleCommand(String line) {
   line.trim();
   if (!line.length()) return;
-
   int tab = line.indexOf('\t');
   String cmd = tab >= 0 ? line.substring(0, tab) : line;
   String payload = tab >= 0 ? line.substring(tab + 1) : "";
 
-  if (cmd == "PING") {
-    Serial1.println("PONG\tPICO_AI\t1");
-    return;
-  }
-  if (cmd == "HELLO") {
-    Serial1.println("READY\tPICO_AI\tVORTEX");
-    return;
-  }
+  if (cmd == "PING") { Serial1.println("PONG\tPICO_AI\t1"); return; }
+  if (cmd == "HELLO") { Serial1.println("READY\tPICO_AI\tVORTEX"); return; }
+
   if (cmd == "USER") {
     int t = payload.indexOf('\t');
     String id = t >= 0 ? payload.substring(0, t) : payload;
@@ -196,11 +180,9 @@ void handleCommand(String line) {
     Serial1.println("USER_OK\t" + id + "\t" + activeName());
     return;
   }
-  if (cmd == "RESET") {
-    rxLine = "";
-    Serial1.println("RESET_OK");
-    return;
-  }
+
+  if (cmd == "RESET") { rxLine = ""; Serial1.println("RESET_OK"); return; }
+
   if (cmd == "PROMPT") {
     String response = answerFor(payload);
     remember(payload);
@@ -210,6 +192,7 @@ void handleCommand(String line) {
     Serial1.println("END");
     return;
   }
+
   if (cmd == "STATUS") {
     Serial1.println("STATUS\tPICO_AI\tONLINE\tUSER=" + activeName());
     return;
@@ -230,11 +213,8 @@ void readPort(Stream &port, bool fromUsb) {
         handleCommand(rxLine);
       }
       rxLine = "";
-    } else if (rxLine.length() < 600) {
-      rxLine += c;
-    } else {
-      rxLine = "";
-    }
+    } else if (rxLine.length() < 600) rxLine += c;
+    else rxLine = "";
   }
 }
 
@@ -244,9 +224,7 @@ void setup() {
   Serial1.setTX(CYD_TX_PIN);
   Serial1.setRX(CYD_RX_PIN);
   Serial1.begin(BAUD);
-
   addUser("guest", "Guest");
-
   Serial.println("=== VORTEX PICO AI COPROCESSOR ===");
   Serial.println("UART1: GP4 TX / GP5 RX");
   Serial.println("USB serial can be used to send a test prompt.");
