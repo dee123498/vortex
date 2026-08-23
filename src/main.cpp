@@ -1,3 +1,3 @@
-// Vortex 2.0 CYD firmware
-// Keep one source of truth for Arduino IDE and PlatformIO.
-#include "../vortex2.ino"
+// Vortex AI v3.1 CYD firmware entry point
+// The root sketch contains the complete Arduino implementation.
+#include "../vortex3_fixed.ino"

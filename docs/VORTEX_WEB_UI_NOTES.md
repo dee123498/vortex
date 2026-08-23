@@ -1,0 +1,1 @@
+The browser UI is served directly by the ESP32 access point. It is designed for local-only use and does not require internet. The UI exposes chat, SD/model status, IP address, purpose, and Vortex command hints.

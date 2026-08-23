@@ -1,0 +1,10 @@
+VORTEX WIRELESS MODE
+
+1. Flash the Vortex firmware.
+2. Power the CYD.
+3. Connect your phone/tablet/PC to Wi-Fi network: VORTEX-AI
+4. Password: Vortex208682De
+5. Open: http://192.168.4.1
+6. Talk to Vortex in the browser.
+
+The ESP32 hosts the page locally. Internet is not required.
