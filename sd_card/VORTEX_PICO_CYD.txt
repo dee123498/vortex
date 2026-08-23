@@ -1,0 +1,24 @@
+VORTEX PICO + CYD SD CARD
+
+Format the card as FAT32.
+
+Create:
+/vortex/
+  model.bin
+  tokenizer.bin
+  wifi.txt
+  users.csv
+  knowledge/
+
+wifi.txt:
+  line 1 = Wi-Fi SSID
+  line 2 = Wi-Fi password
+
+users.csv:
+  guest,Guest
+  user1,User 1
+  user2,User 2
+  user3,User 3
+
+The CYD reads the SD card. The Pico does not directly access the CYD SD reader.
+The Pico has its own 264 KB RAM limit, so do not assume a 128 GB card gives the Pico more working memory.
