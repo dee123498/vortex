@@ -1,0 +1,44 @@
+name: Vortex two-board build
+
+on:
+  push:
+    paths:
+      - 'pico/**'
+      - 'cyd/**'
+      - '.github/workflows/vortex-two-board-build.yml'
+  pull_request:
+    paths:
+      - 'pico/**'
+      - 'cyd/**'
+      - '.github/workflows/vortex-two-board-build.yml'
+
+jobs:
+  build-pico:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pico
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Build Pico firmware
+        run: pio run
+
+  build-cyd:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cyd
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install PlatformIO
+        run: pip install platformio
+      - name: Build CYD firmware
+        run: pio run
